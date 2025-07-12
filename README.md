@@ -145,7 +145,7 @@ python scrape.py
 
 ---
 
-## **🔮 Future Improvements**
+## ** Future Improvements**
 
 * Add **authentication** and **role-based access control**
 * Enable scraper to run via Flask route (e.g., `/python scrape_jobs.py`)
