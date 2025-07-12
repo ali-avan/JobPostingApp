@@ -4,8 +4,8 @@ A full-stack job board application built using **Flask (backend)**, **React + Ty
 
 ---
 
-## 📹 Video Demo  
-[Watch Demo Video](https://www.loom.com/share/cf7c4020e0de4477ae025018aa5dd688?sid=b943e602-37b1-49f3-8077-d894a5a424ee)
+##  Video Demo  
+[ Watch Demo Video](https://www.loom.com/share/cf7c4020e0de4477ae025018aa5dd688?sid=b943e602-37b1-49f3-8077-d894a5a424ee)
 
 ---
 
@@ -16,54 +16,9 @@ A full-stack job board application built using **Flask (backend)**, **React + Ty
 - Keyword-based global search (`q` parameter)  
 - Sort by posting date (newest/oldest)  
 - Pagination support  
-- Selenium scraper integration to fetch external jobs  
+- Selenium scraper integration to fetch jobs from external site  
 
 ---
-
-## Project Structure
-
-project-root/
-├── backend/
-│ ├── app.py # Main Flask app
-│ ├── models/
-│ │ └── job.py # SQLAlchemy Job model
-│ ├── routes/
-│ │ └── job_routes.py # Job API routes using Blueprints
-│ ├── db.py # Database setup
-│ ├── config.py # DB config
-│ └── requirements.txt # Python dependencies
-├── Scraper/
-│ └── scrape.py # Selenium scraper script
-├── frontend/
-│ ├── public/
-│ ├── src/
-│ │ ├── components/ui/
-│ │ │ ├── DeleteDialog.tsx
-│ │ │ ├── FilterSort.tsx
-│ │ │ ├── JobCard.tsx
-│ │ │ ├── JobForm.tsx
-│ │ │ ├── modeToggle.tsx
-│ │ │ ├── Spinner.tsx
-│ │ │ ├── PaginationControls.tsx
-│ │ │ └── TopHeader.tsx
-│ │ │ ├── theme-provider.tsx
-│ │ ├── hooks/
-│ │ │ ├── use-toast.ts
-│ │ │ ├── useAddFormJob.ts
-│ │ │ ├── useEditFormJob.ts
-│ │ │ └── useHomePage.ts
-│ │ ├── lib/
-│ │ │ └── utils.ts
-│ │ ├── pages/
-│ │ │ ├── AddJob.tsx
-│ │ │ ├── EditJob.tsx
-│ │ │ ├── Landing.tsx
-│ │ │ └── Home.tsx
-│ │ ├── api.ts # API functions
-│ │ ├── index.tsx # Entry point
-│ │ └── App.tsx # Main App logic
-│ └── App.css # Global styles
-└── README.md
 
 ##  Setup Instructions
 
@@ -74,69 +29,110 @@ project-root/
 - Chrome Browser + ChromeDriver  
 
 ---
-Technology Decisions
-Flask with Blueprints for modular API design
 
-SQLAlchemy ORM for database access
+###  Backend (Flask)
 
-Selenium for dynamic scraping
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+Update config.py with your database URI
 
-React + TypeScript with clean component architecture
+Initialize the database:
 
-Tailwind CSS + ShadCN UI components
+python
+Copy code
+from db import db
+from app import app
+with app.app_context():
+    db.create_all()
+Run the server:
+
+bash
+Copy code
+python app.py
+ Frontend (React + Vite + TypeScript)
+bash
+Copy code
+cd frontend
+npm install
+npm run dev
+ Scraper (Selenium)
+bash
+Copy code
+cd Scraper
+pip install -r ../backend/requirements.txt
+python scrape.py
+Ensure ChromeDriver is correctly installed and added to your PATH.
+
+ Technology Stack
+Flask with Blueprints for modular API routing
+
+SQLAlchemy ORM for interacting with the database
+
+React + TypeScript for frontend development
+
+Selenium for scraping job listings dynamically
+
+Tailwind CSS + ShadCN UI for a clean UI framework
 
  Assumptions & Trade-Offs
-All scraped jobs are assumed Full-Time unless explicitly stated
+Scraped jobs are considered Full-Time unless explicitly tagged
 
-No user authentication (out of scope for this project)
+No authentication or user roles (intentionally excluded)
 
-10 jobs per page for pagination
+Pagination limited to 10 items per page
 
-Minimal backend validation (trusted use assumed)
+Backend validation is minimal, assuming trusted usage
 
  Notes & Comments
-Frontend (React)
-Clean component structure: JobCard, FilterSort, PaginationControls, etc.
+ Frontend (React)
+Component-based structure with reusable elements (JobCard, FilterSort, PaginationControls, etc.)
 
-Filters, search, and sort use useSearchParams for URL-based state
+Uses useSearchParams for syncing filters, sorting, and pagination via URL
 
-Global search (q) implemented via text matching
+Global search (q) implemented using string matching
 
-Axios (api.ts) handles API calls to backend
+axios in api.ts handles all communication with backend
 
-Custom hooks (useHomePage) and toasts improve code clarity and UX
+Custom hooks (useHomePage, etc.) manage logic cleanly
 
-Backend (Flask)
-Organized with Blueprints in routes/job_routes.py
+Toasts provide real-time feedback on CRUD actions
 
-Uses SQLAlchemy for query filtering, sorting, and pagination (limit, offset)
+ Backend (Flask)
+API logic organized using Blueprints (job_routes.py)
 
-Graceful error handling with try/except + clear JSON responses
+SQLAlchemy handles filtering, sorting, and pagination via limit and offset
 
-flask-cors enables CORS for frontend-backend communication
+CORS handled using flask-cors to enable frontend-backend integration
 
-Scraper (Selenium)
-Extracts job info from actuarylist.com
+Errors are caught using try/except blocks with informative JSON responses
 
-Infers job type from tag keywords
+ Scraper (Selenium)
+Scrapes data from actuarylist.com
 
-Skips duplicates via job_exists() check
+Extracts job title, company, location, tags, and infers job type
 
-Uses app_context() to insert jobs directly into database
+Avoids duplicates using job_exists()
 
-Database (SQLAlchemy)
-Job model stores job fields: title, company, location, posting_date, job_type, tags
+Uses Flask app_context() to interact with the DB from outside the server runtime
 
-tags stored as comma-separated strings but converted to lists via to_dict()
+ Database (SQLAlchemy)
+Job model includes fields: title, company, location, posting_date, job_type, tags
 
-posting_date defaults to date.today()
+tags stored as comma-separated strings in DB, converted to lists in API response
 
- To-Do / Improvements
-Add authentication and user roles
+posting_date defaults to current date using date.today()
 
-Enable scraper to run via Flask route
+to_dict() method used to serialize model data to JSON
 
-Add test coverage for backend API
+ To-Do / Future Improvements 
+Add authentication and role-based access control
+
+Enable scraper to run via Flask route (e.g., /run-scraper)
+
+Add unit and integration tests for backend API
 
  License
 This project is for educational/demo purposes only.
