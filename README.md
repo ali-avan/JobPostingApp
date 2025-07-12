@@ -1,43 +1,38 @@
-# Job Board Platform
+Job Board Platform
+A full-stack job board application built using Flask (backend), React + TypeScript (frontend), and Selenium (scraper). It allows users to view, filter, sort, and manage job listings. Jobs can also be scraped automatically from external sources and viewed via a sleek frontend interface.
 
-A full-stack job board application built using **Flask (backend)**, **React + TypeScript (frontend)**, and **Selenium (scraper)**. It allows users to view, filter, sort, and manage job listings. Jobs can also be scraped automatically from external sources and viewed via a sleek frontend interface.
+Video Demo
+[Watch Demo Video](https://www.loom.com/share/cf7c4020e0de4477ae025018aa5dd688?sid=bd663f9e-949b-45dc-ac2d-4ec783eb389c)
 
----
+Features
+Add, edit, and delete job postings
 
-##  Video Demo  
-[ Watch Demo Video](https://www.loom.com/share/cf7c4020e0de4477ae025018aa5dd688?sid=b943e602-37b1-49f3-8077-d894a5a424ee)
+Filter jobs by title, company, location, type, and tags
 
----
+Keyword-based global search (q parameter)
 
-##  Features
+Sort by posting date (newest/oldest)
 
-- Add, edit, and delete job postings  
-- Filter jobs by title, company, location, type, and tags  
-- Keyword-based global search (`q` parameter)  
-- Sort by posting date (newest/oldest)  
-- Pagination support  
-- Selenium scraper integration to fetch jobs from external site  
+Pagination support
 
----
+Selenium scraper integration to fetch jobs from external site
 
-##  Setup Instructions
+Setup Instructions
+Prerequisites
+Python >= 3.9
 
-### Prerequisites
+Node.js >= 16
 
-- Python >= 3.9  
-- Node.js >= 16  
-- Chrome Browser + ChromeDriver  
+Chrome Browser + ChromeDriver
 
----
-
-###  Backend (Flask)
-
-```bash
+Backend (Flask)
+bash
+Copy code
 cd backend
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-Update config.py with your database URI
+Update config.py with your database URI.
 
 Initialize the database:
 
@@ -52,13 +47,13 @@ Run the server:
 bash
 Copy code
 python app.py
- Frontend (React + Vite + TypeScript)
+Frontend (React + Vite + TypeScript)
 bash
 Copy code
 cd frontend
 npm install
 npm run dev
- Scraper (Selenium)
+Scraper (Selenium)
 bash
 Copy code
 cd Scraper
@@ -66,7 +61,7 @@ pip install -r ../backend/requirements.txt
 python scrape.py
 Ensure ChromeDriver is correctly installed and added to your PATH.
 
- Technology Stack
+Technology Stack
 Flask with Blueprints for modular API routing
 
 SQLAlchemy ORM for interacting with the database
@@ -77,7 +72,7 @@ Selenium for scraping job listings dynamically
 
 Tailwind CSS + ShadCN UI for a clean UI framework
 
- Assumptions & Trade-Offs
+Assumptions and Trade-Offs
 Scraped jobs are considered Full-Time unless explicitly tagged
 
 No authentication or user roles (intentionally excluded)
@@ -86,8 +81,8 @@ Pagination limited to 10 items per page
 
 Backend validation is minimal, assuming trusted usage
 
- Notes & Comments
- Frontend (React)
+Notes and Comments
+Frontend (React)
 Component-based structure with reusable elements (JobCard, FilterSort, PaginationControls, etc.)
 
 Uses useSearchParams for syncing filters, sorting, and pagination via URL
@@ -100,7 +95,7 @@ Custom hooks (useHomePage, etc.) manage logic cleanly
 
 Toasts provide real-time feedback on CRUD actions
 
- Backend (Flask)
+Backend (Flask)
 API logic organized using Blueprints (job_routes.py)
 
 SQLAlchemy handles filtering, sorting, and pagination via limit and offset
@@ -109,7 +104,7 @@ CORS handled using flask-cors to enable frontend-backend integration
 
 Errors are caught using try/except blocks with informative JSON responses
 
- Scraper (Selenium)
+Scraper (Selenium)
 Scrapes data from actuarylist.com
 
 Extracts job title, company, location, tags, and infers job type
@@ -118,7 +113,7 @@ Avoids duplicates using job_exists()
 
 Uses Flask app_context() to interact with the DB from outside the server runtime
 
- Database (SQLAlchemy)
+Database (SQLAlchemy)
 Job model includes fields: title, company, location, posting_date, job_type, tags
 
 tags stored as comma-separated strings in DB, converted to lists in API response
@@ -127,12 +122,12 @@ posting_date defaults to current date using date.today()
 
 to_dict() method used to serialize model data to JSON
 
- To-Do / Future Improvements 
+To-Do and Future Improvements
 Add authentication and role-based access control
 
 Enable scraper to run via Flask route (e.g., /run-scraper)
 
 Add unit and integration tests for backend API
 
- License
+License
 This project is for educational/demo purposes only.
